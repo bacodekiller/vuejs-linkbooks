@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="container">
+  <!-- <div id="app" class="container">
     <div class="page-header">
       <h1>Vue Link To Read Books</h1>
     </div>
@@ -25,9 +25,8 @@
           <input type="submit" class="btn btn-primary" value="Add Book">
         </form>
       </div>
-    </div>
-
-    <div class="panel panel-primary">
+    </div> -->
+   <!-- <div class="panel panel-primary">
       <div class="card-header">
         <h3>Books Lists</h3>
       </div>
@@ -61,13 +60,101 @@
           </tbody>
         </table>
       </div>
-    </div> 
+    </div>  -->
+  <!-- bulma -->
+  <div id="app">
+    <div class="container">
+      <div class="field">
+        <h1 class="title is-1 has-text-centered">Add Book List</h1>
+      </div>
+      <div class="field">
+          <label class="label">Title</label>
+        <div class="control">
+          <input class="input is-info is-rounded" type="text" id="bookTitle" v-model="newBook.title">
+        </div>
+      <div class="field">
+        <label class="label">Author</label>
+        <div class="control">
+          <input class="input is-info is-rounded" type="text" id="bookAuthor" v-model="newBook.author">
+        </div>
+      </div>
+      <div class="field">
+          <label class="label">URL</label>
+        <div class="control">
+          <input class="input is-info is-rounded" type="text" id="bookUrl" v-model="newBook.url">
+        </div>
+      </div>
+      <div class="field">
+        <div class="control">
+          <button @click="addBook()" class="button is-link" v-bind:disabled="this.newBook.title.length == 0 || 
+          this.newBook.author.length == 0 || this.newBook.url.length == 0 ">Submit</button>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <h1 class="title is-1 has-text-centered">Book List</h1>
+    </div>
+  <table class="table" is-bordered  is-fullwidth>
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Author</th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="book of books" v-bind:key="book['.key']">
+        <td>
+          <a v-bind:href="book.url">{{ book.title }}</a>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          {{ book.author }}
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <i class="fas fa-trash" v-on:click="removeBook(book)"></i>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+    </div>
   </div>
 </template>
 
 <script>
-import { booksRef } from './firebase';
-import toastr from 'toastr';
+import { booksRef } from "./firebase";
+import toastr from "toastr";
 export default {
   name: "App",
   firebase: {
@@ -84,13 +171,17 @@ export default {
   },
   methods: {
     addBook() {
-      booksRef.push({ title: this.newBook.title, author: this.newBook.author, url: this.newBook.url });
+      booksRef.push({
+        title: this.newBook.title,
+        author: this.newBook.author,
+        url: this.newBook.url
+      });
       this.newBook.title = "";
       this.newBook.author = "";
       this.newBook.url = "";
     },
-    removeBook: (book) => {
-      booksRef.child(book['.key']).remove();
+    removeBook: book => {
+      booksRef.child(book[".key"]).remove();
       toastr.success("Book removed");
     }
   }
